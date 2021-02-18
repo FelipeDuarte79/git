@@ -1,0 +1,503 @@
+################################
+#                              #
+#    VERSIONAMENTO COM O GIT   #
+#                              #
+################################
+
+
+
+
+####################
+#    INTRODUCAO    #
+####################
+
+- Git permite:
+
+=> acompanhar alteracoes desde as primeiras versoes;
+
+=> detectar, mesclar alteracoes em diferentes arquivos;
+
+=> identificar conflitos;
+
+=> protocolos suportados: local (file://), SSH (root@), Git(git://) e HTTPS;
+
+=> sevico de hospedagem: Github, Gitlab, Butbucket
+
+
+
+
+#####################
+#    VOCABULARIO    #
+#####################
+
+=> commit: alteracoes salvas;
+
+=> tracked: arquivos alterados que foram rastreados
+
+=> mensagem de commit: mensagem que detalha os motivo do commit;
+
+=> branch: ramo para ser usado como experiencia;
+
+=> branch master: ramo padrao quando um projeto e criado;
+
+=> branch de feature: branch de novas funcionalidade;
+
+=> branch de release: branch para versoes antigas de computadores;
+
+=> merge: mesclar um branch pronto com outro em desenvolvimento;
+
+=> tag: marcador para um commit, utilizado para documentar versoes;
+
+=> checkout: acessar uma versao diferente da historia do projeto e verificar o
+estado dos arquivo naquela epoca;
+
+=> pull request: utilizada para iniciar uma discussao, funcionalidades, 
+commits com correções de bugs;
+
+=> issue: discutir funcionalidades e monitorar bugs;
+
+=> wiki: utilizado para documentacao;
+
+=> clone: faz uma copia de um projeto para trabalhar localmente;
+
+=> fork: criar um clone, fazer alteracoes e submeter com pull request.
+
+
+
+
+########################
+#    WORKING PLACES    #
+########################
+
+=> working directory: diretorio de trabalho;
+
+=> stage area: area de rastreio onde mudancas de arquivos sao analiadas;
+
+=> repositorio: local definitivo onde o projeto e salvo;
+
+=> assim temos tres diretorios para cada situacao:
+| diretorio: working directory (WKD) | stage (STG) | repositorio local (RPL) |
+| situacao:  edicao (nao rastreado)  | rastreado   | comitado                |
+| >>------------ git add ------------|--->    >>---|------ git commit -----> |
+| <----------------------------------|-------------|-------- alterado ----<< |
+
+
+
+
+###################
+#    INSTALAR     #
+###################
+
+=> criar uma conta e o repositorio no github:
+    https://github.com/
+
+=> instalando no Linux:
+    sudo apt install git
+
+=> instalando no Windows:
+    https://git-scm.com/download/win.
+
+
+
+
+####################
+#    CONFIGURAR    #
+####################
+
+=> versionar projeto:
+    git init
+
+=> versionar/criar diretorio:
+    git init [diretorio]
+    git init lorem_ipsum
+    Initialized empty Git repository in (...)/lorem_ipsum/.git/
+
+=> criar documentos e diretorios do projeto em seu computador; 
+
+=> adicionar repositorio:
+    git remote add origin https://github.com/[user]/[repo.git]
+    git remote add origin https://github.com/FelipeDuarte79/lorem_ipsum.git
+
+=> configurar usuario:
+    git config --global user.name ['user']
+    git config --global user.name 'Felipe Duarte'
+
+=> configurar email local:
+    git config --global user.email [email@.com]
+    git config --global user.email felipe.duarte@ufsm.br
+
+
+
+
+#######################################
+#    IGNORAR ARQUIVOS E DIRETORIOS    #
+#######################################
+
+=> ignorando arquivos e diretorios: criar o arquivo .gitignore em bloco de
+notas com: nomes, extensoes dos arquivos e diretorios que deverao ser
+ignorados (separados por espacos). Este arquivo tambem deve ser rastreado.
+Exemplo: *.pyc *.log !tmp/config tmp/log/*
+
+
+
+
+
+##############################
+#    TRACKED (WKD -> STG)    #
+##############################
+
+=> arquivos: 
+    git add [arquivo]
+    git add lorem_ipsum.txt
+
+=> arquivos nao rastreados:
+    git status
+    On branch master
+    (...)
+  	.gitignore
+	tmp/
+
+=> varios arquivos:
+    git add .
+
+=> conteudo nao rastreado:
+    $ git diff
+    (...)
+    -Lorem 
+    +Lorem ipsum
+
+=> conteudo rastreados:
+    git diff --staged
+    (...)
+    diff --git a/tmp/config/install.sh b/tmp/config/install.sh
+        --- /dev/null
+        +++ b/tmp/config/install.sh
+        +#!/bin/bash
+    diff --git a/tmp/log/error.log b/tmp/log/error.log
+        (...)
+        --- /dev/null
+        +++ b/tmp/log/error.log
+        +return  1
+    
+=> mudancas (não) rastreadas: 
+    git diff #ultimo_commit
+    git diff 48cdbe5
+        (...)
+        --- a/lorem_ipsum.txt
+        +++ b/lorem_ipsum.txt
+        -Lorem dolor
+        +dolor
+
+
+
+
+#############################
+#    COMMITS (STG -> RPL)   #
+#############################
+
+=> commit (escolha mensagens sucintas e explicativas):
+    git commit -m ['mensagem'];
+    git commit -m '2 palavras' lorem_ipsum.txt 
+        [master (root-commit) 7ff5fc4] 2 palavras
+        1 file changed, 1 insertion(+)
+        create mode 100644 lorem_ipsum.txt
+
+=> verificar:
+    git log
+        commit 7ff5fc47ba2983c5e9458d8d2d733ae98f614edc (HEAD -> master)
+        Author: Felipe Duarte <felipe.duarte@ufsm.br>
+        Date:   Mon Feb 15 01:06:04 2021 -0300
+        2 palavras
+
+=> #n commits:
+    git log -n #n
+    git log -n 2
+    commit b6c32929a42b7316f0c958703dfea9b9f607db87 (HEAD -> master)
+        Author: Felipe Duarte <felipe.duarte@ufsm.br>
+        Date:   Mon Feb 15 01:09:55 2021 -0300
+        3 palavras
+    commit 7ff5fc47ba2983c5e9458d8d2d733ae98f614edc
+        Author: Felipe Duarte <felipe.duarte@ufsm.br>
+        Date:   Mon Feb 15 01:06:04 2021 -0300
+        2 palavras
+
+=> resumo:
+    git log --oneline
+    b6c3292 (HEAD -> master) 3 palavras
+    7ff5fc4 2 palavras
+
+=> commits com numero de linhas adicionadas e removidas:
+    git log --stat -n #n
+    git log --stat -n 2
+    commit 48cdbe50196cecc10e7387aa4e8b2dd3d709d485 (HEAD -> master)
+        Author: Felipe Duarte <felipe.duarte@ufsm.br>
+        Date:   Mon Feb 15 01:14:42 2021 -0300
+        - Ipsum
+        lorem_ipsum.txt | 2 +-
+        1 file changed, 1 insertion(+), 1 deletion(-)
+    commit b6c32929a42b7316f0c958703dfea9b9f607db87
+        Author: Felipe Duarte <felipe.duarte@ufsm.br>
+        Date:   Mon Feb 15 01:09:55 2021 -0300
+        3 palavras
+        lorem_ipsum.txt | 2 +-
+        1 file changed, 1 insertion(+), 1 deletion(-)
+
+=> comparando commits:
+    git diff [#n-1]..[#n]
+    git diff 48cdbe5..e286566
+        (...)
+        -Lorem dolor
+        +dolor
+        
+=> commit e rastreio juntos:
+    git commit -am ['mensagem']
+    git commit -am 'removendo tudo'
+        [master b725e5e] removendo tudo
+        5 files changed, 4 insertions(+), 1 deletion(-)
+
+=> lista commits com seus respectivos pais
+    git log --parents
+    git log --parents -n 2
+    commit 8335b3(...) a1de40(...) (HEAD -> master)
+        Author: Felipe Duarte <felipe.duarte@ufsm.br>
+        Date:   Mon Feb 15 17:53:12 2021 -0300
+        meia frase
+    commit a1de40(...) 30d021(...)
+        Author: Felipe Duarte <felipe.duarte@ufsm.br>
+        Date:   Mon Feb 15 17:52:53 2021 -0300
+        frase completa
+
+=> lista commits com seus respectivos pais no formato resumido
+    git log --oneline --parents
+        8335b30 a1de40f (HEAD -> master) meia frase
+        a1de40f 30d0211 frase completa
+        30d0211 b32e3f2 frase completa
+        b32e3f2 b725e5e 2 palavras
+        b725e5e e286566 removendo tudo
+        e286566 48cdbe5 - Loren
+        48cdbe5 b6c3292 - Ipsum
+        b6c3292 7ff5fc4 3 palavras
+        7ff5fc4 2 palavras
+
+
+
+
+############################
+#    CLONAR REPOSITORIO    #
+############################
+    
+    git clone https://github.com/[user]/[repositorio.git]
+    git clone https://github.com/FelipeDuarte79/lorem_ipsum.git
+
+
+
+
+###############################
+#    ENVIAR AO REPOSITORIO    #
+###############################
+
+    git push origin master
+
+
+
+
+##########################
+#    DELETAR ARQUIVOS    #
+##########################
+
+=> arquivos que receberam commit (nao esqueça de fazer o commit apos o rm):
+    git rm [arquivo]
+    git rm lorem.ipsum.txt
+    
+=> arquivos deletados manualmente:
+    git add --all
+
+
+
+
+###########################
+#    RENOMEAR ARQUIVOS    #
+###########################
+
+    git mv [velho] [novo]
+
+
+
+
+#############################
+#    REVERTENDO MUDANCAS    #
+#############################
+
+=> mudanças rastreadas (remove da stage, sem alrerar o arquivo):
+    git checkout -- [arquivo]
+    git checkout -- lorem_ipsum.txt 
+
+=> mudanças rastreadas (remove da stage e altera o arquivo):
+    git checkout reset --hard 
+    
+=> desfazendo mudanças comitadas:
+    
+    git revert --no-edit #id0
+    git revert --no-edit b32e3f2
+
+    git reset --hard #id0
+    git reset --hard b32e3f2
+
+
+
+
+########################
+#    MOVER ARQUIVOS    #
+########################
+
+    git mv [diretorio0]/[arquivo] [diretori1]
+
+
+
+############################
+#    REPOSITORIO REMOTO    #
+############################
+
+=> inicializa:
+    git init --bare [repositorio.git]
+    
+=> adiciona:
+    git remote add servidor file://[ip/diretorio/repositorio.git]
+
+=> lista:
+    git remote
+
+=> lista com urls:
+    git remote -v
+
+=> renomeia:
+    git remote rename [velho] [novo]
+    
+=> configura url:
+    git remote set-url servidor file://[ip/diretorio/repositorio.git]
+
+=> clona:
+    git clone file://[ip/diretorio/repositorio.git]
+   
+=> sincronizacao
+    git pull servidor master
+
+
+
+
+##################
+#    BRANCHES    #
+##################
+
+=> branch é uma linha de desenvolvimento independete, permitindo commits de 
+novas funcionalidades sem afetar outras linhas (branches);
+
+=> lista:
+    git branch
+    * master
+    
+=> lista com os commits associados:
+    git branch -v
+    * master 8335b30 meia frase
+
+=> cria:
+    git branch [nome]
+    git branch paragrafos
+
+=> troca de branch:
+    git checkout [nome]
+    git checkout paragrafos
+    
+=> cria e troca:
+    git branch -b [nome]
+    git branch -b paragrafos
+
+=> deleta (nao e possivel deletar uma branch que possui commits nao aplicados
+em outra branch):
+    git branch -d [nome]
+    git branch -d paragrafos
+
+=> deleta branch com commits:
+    git branch -D [nome] 
+    
+=> verifica branch nao mesclada:
+    git branch --no-merged
+
+=> mesclando brach com merge:
+    git merge [nome] -m ['mensagem']
+    git merge paragrafos -m 'adicionando paragrafo'
+        Updating 8335b30..9172ad0
+        Fast-forward (no commit created; -m option ignored)
+        lorem_ipsum.txt | 6 +++++-
+        1 file changed, 5 insertions(+), 1 deletion(-)
+
+=> a branch de destino pode não gerar um commit de merge, se a branch de
+destino não tiver nenhum commit desde que a branch de origem foi criada (fast-
+forward). Esse tipo de merge pode ser evitado passando a opção: --no-ff;
+
+=> merge pode gerar muitos commits de merge, dependendo do tamanho do projeto,
+assim é possivel mesclar branches e deixar o historico mais sucinto por meio
+da opcao rebase, esta opcao deve ser executada a partir da branch de destino:
+    git rebase [nome]
+    git rebase paragrafos
+
+
+
+
+#########################
+#    BRANCHES REMOTAS   #
+#########################
+
+=> lista a brantch remota:
+    git branch -r -v
+
+=> compartilhando branch:
+    git push origin master
+
+=> lista branch locais e remotas:
+    git branch -a -v
+
+=> mescla branch remota e local (merge):
+    git merge origin/master -m [mensagem]
+
+=> mescla branch remota e local (rebase):
+    git rebase origin/master
+
+=> obter commits e mesclar com pull:
+    git pull --rebase
+
+
+
+
+##############
+#    TAGS    #
+##############
+
+=> lista:
+    git tag
+
+=> cria:
+    git tag [tag]
+
+=> deleta:
+    git tag -d [tag]
+
+=> tag com observacao:
+    git tag =a [tag] -m ['mensagem']
+    
+=> exibe observacao:
+    git show -s [tag]
+
+=> compartilha:
+    git push origin [tag] 
+
+=> compartilha todas as tags:
+    git push origin ==tags
+
+#####################
+#    REFERENCIAS    #
+#####################
+
+- Introducao ao GitHub; Bell e Beer; Novatec, 1 Ed, 2015.
+- Controlando Versoes com Git e GitHub; Aquiles, A.; Ferreira, R. Casa do
+Codigo
