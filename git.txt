@@ -497,6 +497,20 @@ da opcao rebase, esta opcao deve ser executada a partir da branch de destino:
 => compartilha todas as tags:
     git push origin ==tags
 
+
+
+######################
+#    ERROS COMUNS    #
+######################
+
+- erro de branch
+Mensagem: src refspec master does not match any. error failed to push some 
+    refs to
+Solução: verificar a branch
+
+
+
+
 #####################
 #    REFERENCIAS    #
 #####################
