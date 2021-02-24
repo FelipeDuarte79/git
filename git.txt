@@ -279,6 +279,9 @@ Exemplo: *.pyc *.log !tmp/config tmp/log/*
         b6c3292 7ff5fc4 3 palavras
         7ff5fc4 2 palavras
 
+=> editando commits
+    git commit --amend [arquivo]
+
 
 
 
